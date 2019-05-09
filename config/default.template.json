@@ -1,0 +1,8 @@
+{
+  "dbconnect": {
+    "host"     : "localhost",
+    "user"     : "<dbuser>",
+    "password" : "<dbpass>",
+    "database" : "<yourdb>",
+  }
+}

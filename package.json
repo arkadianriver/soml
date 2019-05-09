@@ -1,0 +1,33 @@
+{
+  "name": "soml",
+  "version": "1.0.0",
+  "description": "soml (The Story of my Life) is a personal journal with media and timeline",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arkadianriver/soml.git"
+  },
+  "keywords": [
+    "mysql",
+    "express",
+    "photos",
+    "maps",
+    "media"
+  ],
+  "author": "Gary Faircloth (http://arkadianriver.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arkadianriver/soml/issues"
+  },
+  "homepage": "https://github.com/arkadianriver/soml#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "config": "^3.1.0",
+    "express": "^4.16.4",
+    "mysql": "^2.17.1"
+  }
+}

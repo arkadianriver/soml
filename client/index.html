@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>jrnl Interface</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+  <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+  <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+</head>
+<body style="background-color: #6cc; color: #333">
+  
+  <!-- Modal window sittin' here waiting -->
+  
+  <div class="modal fade" id="entryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="color:black">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="entryModalTitle">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="entryModalBody">
+          Here is the contents of the modal body....
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main UI -->
+  
+  <div class="container">
+    <ul class="nav nav-tabs">
+      <li><a data-toggle="tab" href="#create">Create</a></li>
+      <li class="active"><a data-toggle="tab" href="#search">Search</a></li>
+    </ul>
+    
+    <div class="tab-content">
+      
+      <!-- CREATE tab -->
+      
+      <div id="create" class="tab-pane fade">
+        <h3>Create new entry</h3>
+        <textarea class="form-control" rows="10" placeholder="Write something here..." id="compose" style="background-color: #4e535b; color: white; font-size: 18px;"></textarea>
+        <br/>
+        <input type="button" class="btn btn-primary btn-lg btn-block" value="Submit Entry" id="submitEntryButton" onclick="create()">
+      </div>
+      
+      <!-- SEARCH tab -->
+      
+      <div id="search" class="tab-pane fade in active">
+        <h3>Search entries</h3>
+        <form action="javascript:;" onsubmit="search()" id="searchForm">
+          <div class="container">
+            <div class="row">
+              <div class='col-md-5'>
+                  <label for="filterStart" style="padding-top: 6px;">From:</label>
+                  <input type='text' class="form-control" id='filterStart'/>
+              </div>
+              <div class='col-md-5'>
+                <label for="filterEnd" style="padding-top: 6px;">To:</label>
+                <input type='text' class="form-control" id='filterEnd'/>
+              </div>
+            </div>
+            <script type="text/javascript">
+              $(function () {
+                $('#filterStart').datetimepicker({
+                  useCurrent: false,
+                  format: 'YYYY-MM-DD HH:mm',
+                  defaultDate: '1970-01-01 00:00'
+                });
+                $('#filterEnd').datetimepicker({
+                  useCurrent: true,
+                  format: 'YYYY-MM-DD HH:mm'
+                });
+                $("#filterStart").on("dp.change", function (e) {
+                  $('#filterEnd').data("DateTimePicker").minDate(e.date);
+                });
+                $("#filterEnd").on("dp.change", function (e) {
+                  $('#filterStart').data("DateTimePicker").maxDate(e.date);
+                });
+              });
+            </script>
+            <br/>
+            <div class="row">
+              <div class='col-md-10'>
+                <div class="panel-group">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#advancedOps">Show/Hide advanced options</a>
+                      </h4>
+                    </div>
+                    <div id="advancedOps" class="panel-collapse collapse">
+                      <div class="panel-body" style="background-color: #5bb">
+                        <label for="terms">Please enter search terms:</label>
+                        <input type="text" class="form-control" placeholder="World domination" id="terms">
+                        <br/>
+                        <label><input type="checkbox" value="" id="starred">Show only starred entries</label><br />
+                        <br>
+                        <label><input type="checkbox" value="" id="limitByNum" checked>Limit number of results returned</label><br />
+                        <label for="num">Number of results:</label>
+                        <input class="form-control" type="number" value="20" min="1" id="num">
+                        <br />
+                        <label for="tags">Please enter tags to filter by:</label>
+                        <input type="text" class="form-control" placeholder="@tagOne @tagTwo" id="tags">
+                        <span><label><input type="radio" name="optandor" value="" checked>or&nbsp;&nbsp;</label><label><input type="radio" name="optandor" id="useAnd">and</label></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="container">
+          <div class="row">
+            <div class='col-md-10'>
+              <input type="button" class="btn btn-primary btn-lg btn-block" value="Search" id="searchButton" onclick="search()">
+            </div>
+          </div>
+        </div>
+        <br/>
+        
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#cards">Cards</a></li>
+          <li><a data-toggle="tab" href="#timeline">Timeline</a></li>
+        </ul>
+        
+        <div class="tab-content">
+          <div id="cards" class="tab-pane fade in active">
+            <div class="row" id="searchResults"></div>
+          </div>
+          <div id="timeline" class="tab-pane fade">
+            <div id='timeline-embed' style="width: 100%; height: 600px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    var timeline
+    
+    $('#searchForm input').keydown(function (e) {
+      if (e.keyCode == 13) {
+        $('#searchForm').submit();
+      }
+    })
+    
+    function create() {
+      if (document.getElementById('compose').value == '') {
+        showModal('Error', 'Please compose your entry above before submitting.')
+        return
+      }
+      
+      let button = document.getElementById('submitEntryButton')
+      let initialValue = button.value
+      button.value = 'Submitting...'
+      button.setAttribute('disabled', 'true')
+      
+      
+      $.ajax({
+        type: 'POST',
+        url: '/create',
+        data: {
+          entry: document.getElementById('compose').value
+        },
+        success: (data, status) => {
+          button.value = initialValue
+          button.removeAttribute('disabled')
+          if (status == 'success') {
+            if (data.success == true) {
+              document.getElementById('compose').value = ''
+              showModal('Entry added', `<strong>Your entry has been added successfully.</strong><br /><small>stdout: "${data.stdo}" stderr: "${data.stde}"</small>`)
+              return
+            }
+          }
+          showModal('Error', `Something went wrong. Please try again in a little bit.<br />More info:<br />data: ${JSON.stringify(data)} status: ${status}`)
+        },
+        error: (jqXHR, status) => {
+          button.value = initialValue
+          button.removeAttribute('disabled')
+          
+          if (status == 'timeout') {
+            showModal('Error', 'The server took too long to respond. Please try again in a little bit.')
+            return
+          }
+          showModal('Error', `Your request was unable to be completed: ${status}`)
+        },
+        dataType: 'json',
+        timeout: 10000
+      })
+      
+    }
+    
+    function search() {
+      let button = document.getElementById('searchButton')
+      let initialValue = button.value
+      button.value = 'Searching...'
+      button.setAttribute('disabled', 'true')
+      
+      $.ajax({
+        type: 'POST',
+        url: '/search',
+        data: {},
+        /*
+        data: {
+          terms: document.getElementById('terms').value,
+          limitByNum: document.getElementById('limitByNum').checked,
+          num: document.getElementById('num').value,
+          starred: document.getElementById('starred').checked,
+          tags: document.getElementById('tags').value,
+          useAnd: document.getElementById('useAnd').checked,
+          filterEarlier: document.getElementById('filterEarlier').value,
+          filterLater: document.getElementById('filterLater').value
+        },
+        */
+        success: (data, status) => {
+          button.value = initialValue
+          button.removeAttribute('disabled')
+          if (status == 'success') {
+            let result = ''
+            let entries = data.entries
+            if (entries) {
+              entries.forEach((entry) => {
+                result += '<div class="col-lg-3 col-md-4 col-sm-6 col-12"><div class="panel panel-default" style="background-color: #414141">'
+                  result += `<p class="h4">${entry.headline}</p>`
+                  result += `<p><strong>${entry.memorystart + ' to ' + entry.memoryend}</strong></p>`
+                  result += `<p>${entry.text}</p>`;
+                  result += '</div></div>'
+                })
+                document.getElementById('searchResults').innerHTML = result
+                
+                let args = {
+                  start_at_end: true,
+                  default_bg_color: { r: 255, g: 255, b: 255 },
+                  scale_factor: 13,
+                  debug: true
+                }
+                timeline = new TL.Timeline('timeline-embed', timelineJson(entries), args)
+                
+                return
+              }
+            }
+            showModal('Error', `Something went wrong. Please try again in a little bit.<br />More info:<br />data: ${JSON.stringify(data)} status: ${status}`)
+          },
+          error: (jqXHR, status) => {
+            button.value = initialValue
+            button.removeAttribute('disabled')
+            
+            if (status == 'timeout') {
+              showModal('Error', 'The server took too long to respond. Please try again in a little bit.')
+              return
+            }
+            showModal('Error', `Your request was unable to be completed: ${status}`)
+          },
+          dataType: 'json',
+          timeout: 10000
+        })
+      }
+      
+      function showModal(title, body) {
+        document.getElementById('entryModalTitle').innerHTML = title
+        document.getElementById('entryModalBody').innerHTML = body
+        $('#entryModal').modal()
+      }
+      
+      function timelineJson(entries) {
+        let result = { events: [] }
+        /*
+        title: {
+          text: {
+            headline: "The Story of My Life",
+            text: "<p>Yep, this is it...</p>"
+          }
+        },events: []
+      }
+      */
+      entries.forEach((entry) => {
+        let date = entry.memorystart.match(/^(\d\d\d\d)-(\d\d)-(\d\d)/)
+        let sYear = date[1]
+        let sMonth = date[2]
+        let sDay = date[3]
+        date = entry.memoryend.match(/^(\d\d\d\d)-(\d\d)-(\d\d)/)
+        let eYear = date[1]
+        let eMonth = date[2]
+        let eDay = date[3]
+        result.events.push({
+          //media: { url: 'javascript: showModel("Content","blah, blah, blah")' },
+          start_date: { year: sYear, month: sMonth, day: sDay },
+          end_date: { year: eYear, month: eMonth, day: eDay },
+          text: { headline: entry.headline, text: entry.text }
+        })
+      })
+      return result
+    }
+  </script>
+  
+</body>
+
+</html>
