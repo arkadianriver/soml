@@ -3,6 +3,6 @@
     "host"     : "localhost",
     "user"     : "<dbuser>",
     "password" : "<dbpass>",
-    "database" : "<yourdb>",
+    "database" : "<yourdb>"
   }
 }
