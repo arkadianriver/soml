@@ -133,16 +133,16 @@
         <br/>
         
         <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#cards">Cards</a></li>
-          <li><a data-toggle="tab" href="#timeline">Timeline</a></li>
+          <li class="active"><a data-toggle="tab" href="#timeline">Timeline</a></li>
+          <li><a data-toggle="tab" href="#cards">Cards</a></li>
         </ul>
         
         <div class="tab-content">
-          <div id="cards" class="tab-pane fade in active">
-            <div class="row" id="searchResults"></div>
-          </div>
-          <div id="timeline" class="tab-pane fade">
+          <div id="timeline" class="tab-pane fade in active">
             <div id='timeline-embed' style="width: 100%; height: 600px"></div>
+          </div>
+          <div id="cards" class="tab-pane fade">
+            <div class="row" id="searchResults"></div>
           </div>
         </div>
       </div>
@@ -234,6 +234,14 @@
             let entries = data.entries
             if (entries) {
               entries.forEach((entry) => {
+                let args = {
+                  start_at_end: false,
+                  default_bg_color: { r: 255, g: 255, b: 255 },
+                  //scale_factor: 13,
+                  //debug: true
+                }
+                timeline = new TL.Timeline('timeline-embed', timelineJson(entries), args)
+                
                 result += '<div class="col-lg-3 col-md-4 col-sm-6 col-12"><div class="panel panel-default" style="background-color: #414141">'
                   result += `<p class="h4">${entry.headline}</p>`
                   result += `<p><strong>${entry.memorystart + ' to ' + entry.memoryend}</strong></p>`
@@ -241,14 +249,6 @@
                   result += '</div></div>'
                 })
                 document.getElementById('searchResults').innerHTML = result
-                
-                let args = {
-                  start_at_end: true,
-                  default_bg_color: { r: 255, g: 255, b: 255 },
-                  scale_factor: 13,
-                  debug: true
-                }
-                timeline = new TL.Timeline('timeline-embed', timelineJson(entries), args)
                 
                 return
               }
